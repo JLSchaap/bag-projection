@@ -9,8 +9,7 @@ import { Map } from 'maplibre-gl';
 })
 export class BagMapComponent implements OnInit, AfterViewInit, OnDestroy {
   map: Map | undefined;
-  worldMap: Map | undefined;
-  styles = ['assets/bagstd.json', 'https://demotiles.maplibre.org/style.json']
+  styles = ['assets/bagstd.json', 'https://demotiles.maplibre.org/style.json', 'https://api.pdok.nl/lv/bag/ogc/v0_1/styles/bagstd?f=mapbox']
 
 
   @ViewChild('map')
@@ -18,8 +17,6 @@ export class BagMapComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private mapContainer!: ElementRef<HTMLElement>;
 
-  @ViewChild('mapWorld')
-  private mapContainerWorld!: ElementRef<HTMLElement>;
 
 
   initialState = {
@@ -35,8 +32,7 @@ export class BagMapComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
     this.showmap(this.initialState, this.styles[0], this.mapContainer, this.map!);
-    this.showmap(this.initialState, this.styles[1], this.mapContainerWorld, this.worldMap!);
-
+ 
   }
 
   private showmap(initialState: { lng: number; lat: number; zoom: number; }, style: string, container: { nativeElement: any; }, localvar: Map) {
@@ -57,13 +53,14 @@ export class BagMapComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     this.map?.remove();
-    this.worldMap?.remove(); 
-  }
+    }
 
   changeStyle(style: string) {
     console.log("change")
     console.log(style)
-    // this.showmap(this.initialState, style)
+    this.map?.remove();
+    this.showmap(this.initialState, style, this.mapContainer, this.map!);
+ 
 
 
   }
